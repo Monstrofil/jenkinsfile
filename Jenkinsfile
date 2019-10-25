@@ -20,22 +20,9 @@ for(int i=0; i< axisNode.size(); i++) {
     }
 }
 
-stages {
-
-    stage ("build") {
-        parallel {
-            stage ("cpanel") {
-                parallel tasks
-            }
-            stage ("directadmin") {
-                parallel tasks
-            }   
-        }
-    }
-
-    stage("After") {
-        node {
-            echo "after"
-        }
-    }
+stage ("cpanel") {
+    parallel tasks
 }
+stage ("directadmin") {
+    parallel tasks
+}   
