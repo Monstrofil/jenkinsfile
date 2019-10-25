@@ -21,14 +21,14 @@ for(int i=0; i< axisNode.size(); i++) {
 }
 
 stage ("build") {
-    parallel stage ("cpanel") {
-        parallel tasks
+    parallel {
+        stage ("cpanel") {
+            parallel tasks
+        }
+        stage ("directadmin") {
+            parallel tasks
+        }   
     }
-
-
-    parallel stage ("directadmin") {
-        parallel tasks
-    }   
 }
 
 stage("After") {
