@@ -7,7 +7,6 @@ def getTasks(axisNodes, axisTools) {
             tasks["${axisNodeValue}/${axisToolValue}"] = {
                 node(axisNodeValue) {
                     def javaHome = tool axisToolValue
-                    println "Node=${env.NODE_NAME}"
                     println "Java=${javaHome}"
                 }
             }
