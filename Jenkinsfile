@@ -5,10 +5,8 @@ def getTasks(axisNodes, axisTools) {
         for(int j=0; j< axisTools.size(); j++) {
             def axisToolValue = axisTools[j]
             tasks["${axisNodeValue}/${axisToolValue}"] = {
-                node(axisNodeValue) {
-                    def javaHome = tool axisToolValue
-                    println "Java=${javaHome}"
-                }
+                def javaHome = tool axisToolValue
+                println "Java=${javaHome}"
             }
         }
     }
