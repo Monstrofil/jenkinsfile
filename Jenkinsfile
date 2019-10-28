@@ -20,9 +20,6 @@ for(int i=0; i< axisNode.size(); i++) {
     }
 }
 
-stage ("cpanel") {
+stage {
     parallel tasks
 }
-stage ("directadmin") {
-    parallel tasks
-}   
