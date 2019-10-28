@@ -1,25 +1,48 @@
-def axisNode = ["stable","release", "current", "edge"]
-def axisTool = ["cl6","cl6h","cl7","cl7h","cl8"]
-def tasks = [:]
-
-for(int i=0; i< axisNode.size(); i++) {
-    def axisNodeValue = axisNode[i]
-    def subTasks = [:]
-    for(int j=0; j< axisTool.size(); j++) {
-        def axisToolValue = axisTool[j]
-        subTasks["${axisNodeValue}/${axisToolValue}"] = {
-            def javaHome = tool axisToolValue
-            println "Node=${env.NODE_NAME}"
-            println "Java=${javaHome}"
+def getTasks(axisNodes, axisTools) {
+    def tasks = [:]
+    for(int i=0; i< axisNodes.size(); i++) {
+        def axisNodeValue = axisNodes[i]
+        for(int j=0; j< axisTools.size(); j++) {
+            def axisToolValue = axisTools[j]
+            tasks["${axisNodeValue}/${axisToolValue}"] = {
+                node(axisNodeValue) {
+                    def javaHome = tool axisToolValue
+                    println "Node=${env.NODE_NAME}"
+                    println "Java=${javaHome}"
+                }
+            }
         }
     }
-    tasks["${axisNodeValue}"] = {
-        node(axisNodeValue) {
-            parallel subTasks
-        }
-    }
+    return tasks
 }
 
-stage {
-    parallel tasks
+pipeline {
+    agent none
+
+    stages {
+
+        stage("Before") {
+            agent any
+            steps {
+                echo "before"
+            }
+        }
+
+        stage("Matrix") {
+            steps {
+                script {
+                    def axisNodes = ["osx-agent-1","osx-agent-2"]
+                    def axisTool = ["jdk7","jdk8"]
+                    parallel getTasks(axisNodes, axisTool)
+                }
+            }
+        }
+
+        stage("After") {
+            agent any
+            steps {
+                echo "after"
+            }
+        }
+    }
 }
